@@ -13,10 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float gravity;
 
-    //[SerializeField] private float turnsmoothtime = 0.1f;
-    //private float turnsmoothvelocity;
-
-    //variable
+   
     private Vector3 moveforward;
     private Vector3 velocity;
 
@@ -27,17 +24,12 @@ public class PlayerController : MonoBehaviour
     //calling functions in the begining of the game
     private void Start()
     {
-       
-
         controller = GetComponent<CharacterController>();
-        
     }
 
     //calling functions in every frame of the game
     private void Update()
     {
-        
-
         Move();
     }
 
@@ -55,8 +47,8 @@ public class PlayerController : MonoBehaviour
         }
 
         float movez = Input.GetAxisRaw("Vertical");
-        // float movex = Input.GetAxisRaw("Horizontal");
-        moveforward = new Vector3(0, 0, movez).normalized;
+        float movex = Input.GetAxisRaw("Horizontal");
+        moveforward = new Vector3(movex, 0, movez).normalized;
 
         //move player to player's direction not to world direction
         moveforward = transform.TransformDirection(moveforward);
@@ -65,45 +57,27 @@ public class PlayerController : MonoBehaviour
         if (moveforward != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
         {
             Walk();
-           
         }
 
         else if (moveforward != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
         {
-            Run();
-            
+            Run();  
         }
 
         else if (moveforward == Vector3.zero)
         {
-            Idle();
-           
+            Idle(); 
         }
 
 
         if (isgrounded)
         {
-
-
-            //calling jump function when pressed space
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }
 
         }
-
-
-
-
-
-
-
-        //rotate player to the input direction
-        /*float targetangle = Mathf.Atan2(moveforward.x, moveforward.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref turnsmoothvelocity, turnsmoothtime);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);*/
-
         controller.Move(moveforward * movespeed * Time.deltaTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
@@ -131,11 +105,5 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
-        
-
-
     }
-
-  
-
 }
